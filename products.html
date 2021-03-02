@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+        crossorigin="anonymous"></script>
+    <script>
+        const DB_URL = "https://6a5a0e85-6282-465b-b46d-364a80e1b15d-bluemix.cloudantnosqldb.appdomain.cloud";
+    </script>
+    <script src="product-service.js"></script>
+</head>
+
+<body>
+    <h3>List Products</h3>
+    <script>
+        function displayProducts() {
+            let products = ProductService.getAllProducts();
+            products.then(response => {
+                let data = response.data.rows;
+                let productList = data.map(obj => obj.doc);
+                console.table(productList);
+            });
+        }
+        // displayProducts();
+        let brandNames = ['Samsung', 'Nokia'];
+        function searchProductsByBrandName(brandNames) {
+            ProductService.searchProducts(brandNames).then(response => {
+                let productsResult = response.data.docs;
+                console.table(response.data.docs);
+            });
+        }
+        searchProductsByBrandName(brandNames);
+
+        let minPrice = 12000;
+        let maxPrice = 15000;
+        function filterProductByPrice(minPrice, maxPrice) {
+            ProductService.priceFilter(minPrice, maxPrice).then(res => {
+                let filteredProduct = res.data.docs;
+                console.table(res.data.docs);
+            });
+        }
+        // filterProductByPrice(minPrice, maxPrice);
+    </script>
+</body>
+
+
+</html>
